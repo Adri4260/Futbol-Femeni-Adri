@@ -1,0 +1,206 @@
+/* ===== Tipografía y body ===== */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f3f4f6;
+    color: #111827;
+    margin: 0;
+}
+
+/* ===== Header ===== */
+.topbar {
+    background-color: #2563eb;
+    color: white;
+    padding: 1rem 2rem;
+    text-align: center;
+    font-size: 1.75rem;
+    font-weight: bold;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* ===== Menú ===== */
+.main-menu {
+    background: #1e40af;
+    padding: 0.5rem 0;
+}
+
+.main-menu ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 2rem;
+}
+
+.main-menu a {
+    color: #e0e7ff;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.main-menu a:hover {
+    color: #ffffff;
+    transform: scale(1.05);
+}
+
+/* ===== Container principal ===== */
+.container {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 2rem;
+}
+
+/* ===== Tarjetas para items (equips, estadis, jugadores, partits) ===== */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    padding: 1.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.card h3 {
+    margin-top: 0;
+    color: #1e40af;
+}
+
+/* ===== Formularios ===== */
+.form label {
+    display: block;
+    margin-top: 1rem;
+    margin-bottom: 0.3rem;
+    font-weight: 500;
+}
+
+.form input,
+.form select {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.2s;
+}
+
+.form input:focus,
+.form select:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.2);
+}
+
+/* ===== Botones ===== */
+.btn {
+    display: inline-block;
+    padding: 0.6rem 1.2rem;
+    border-radius: 10px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background: #2563eb;
+    color: white;
+    box-shadow: 0 2px 6px rgba(37,99,235,0.4);
+}
+
+.btn-primary:hover {
+    background: #1e3a8a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37,99,235,0.5);
+}
+
+/* ===== Alertas ===== */
+.alert {
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.alert-success {
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+
+.alert-error {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+/* ===== Componentes mini ===== */
+.equip-mini {
+    font-weight: 600;
+    background-color: #e0e7ff;
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+    display: inline-block;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+}
+
+.equip-mini:hover {
+    background-color: #2563eb;
+    color: white;
+    transform: scale(1.05);
+}
+
+/* ===== Tablas modernas ===== */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.table th, .table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #e5e7eb;
+    text-align: left;
+}
+
+.table th {
+    background: #e0e7ff;
+    font-weight: 600;
+}
+
+.table tr:hover {
+    background-color: #f3f4f6;
+    transition: background 0.2s;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+    .main-menu ul {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .container {
+        padding: 1rem;
+        margin: 1rem;
+    }
+
+    .card-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
