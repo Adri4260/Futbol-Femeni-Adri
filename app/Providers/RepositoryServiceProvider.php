@@ -6,19 +6,14 @@ use Illuminate\Support\ServiceProvider;
 use App\Repositories\EquipRepositoryInterface;
 use App\Repositories\Eloquent\EquipRepository;
 
-class AppServiceProvider extends ServiceProvider
+class RepositoryServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
-    public function register(): void
+    public function register()
     {
         $this->app->bind(EquipRepositoryInterface::class, EquipRepository::class);
     }
-    /**
-     * Bootstrap any application services.
-     */
-    public function boot(): void
+
+    public function boot()
     {
         //
     }

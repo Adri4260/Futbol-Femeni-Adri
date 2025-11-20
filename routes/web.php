@@ -30,3 +30,8 @@ Route::post('/jugadores', [JugadoraController::class, 'store'])->name('jugadores
 Route::get('/partits', [PartitController::class, 'index'])->name('partits.index');
 Route::get('/partits/crear', [PartitController::class, 'create'])->name('partits.create');
 Route::post('/partits', [PartitController::class, 'store'])->name('partits.store');
+
+Route::resource('equips', EquipController::class);
+Route::resource('estadis', EstadiController::class);
+Route::resource('jugadores', JugadoraController::class);
+Route::resource('partits', PartitController::class);

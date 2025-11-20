@@ -2,15 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\EquipService;
 use Illuminate\Http\Request;
 
 class EquipController extends Controller
 {
+    protected $service;
+
+    public function __construct(EquipService $service)
+    {
+        $this->service = $service;
+    }
+
     public function index()
     {
-        $equips = $this->getEquips();
-
+        $equips = $this->service->all();
         return view('equips.index', compact('equips'));
+    }
+
+    public function show($id)
+    {
+        $equip = $this->service->find($id);
+        return view('equips.show', compact('equip'));
     }
 
     public function create()
@@ -21,56 +34,36 @@ class EquipController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nom'   => 'required|min:3',
-            'ciutat'=> 'required|min:2',
-            'lliga' => 'required|min:3',
+            'nom' => 'required|string|max:255',
+            'categoria' => 'nullable|string|max:255',
         ]);
 
-        $equips = $this->getEquips();
-        $equips[] = $validated;
+        $this->service->create($validated);
 
-        session(['equips' => $equips]);
-
-        return redirect()
-            ->route('equips.index')
-            ->with('success', 'Equip creat correctament.');
+        return redirect()->route('equips.index');
     }
 
-    public function show(int $index)
+    public function edit($id)
     {
-        $equips = $this->getEquips();
-
-        abort_if(!isset($equips[$index]), 404);
-
-        $equip = $equips[$index];
-
-        return view('equips.show', compact('equip', 'index'));
+        $equip = $this->service->find($id);
+        return view('equips.edit', compact('equip'));
     }
 
-    protected function getEquips(): array
+    public function update(Request $request, $id)
     {
-        if (!session()->has('equips')) {
-            $seed = [
-                [
-                    'nom'    => 'Barça Femení',
-                    'ciutat' => 'Barcelona',
-                    'lliga'  => 'Lliga F',
-                ],
-                [
-                    'nom'    => 'Atlètic de Madrid Femení',
-                    'ciutat' => 'Madrid',
-                    'lliga'  => 'Lliga F',
-                ],
-                [
-                    'nom'    => 'Real Madrid Femení',
-                    'ciutat' => 'Madrid',
-                    'lliga'  => 'Lliga F',
-                ],
-            ];
+        $validated = $request->validate([
+            'nom' => 'required|string|max:255',
+            'categoria' => 'nullable|string|max:255',
+        ]);
 
-            session(['equips' => $seed]);
-        }
+        $this->service->update($id, $validated);
 
-        return session('equips', []);
+        return redirect()->route('equips.index');
+    }
+
+    public function destroy($id)
+    {
+        $this->service->delete($id);
+        return redirect()->route('equips.index');
     }
 }
