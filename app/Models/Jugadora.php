@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Jugadora extends Model
 {
@@ -28,6 +29,6 @@ class Jugadora extends Model
 
     public function getEdatAttribute()
     {
-        return \Carbon\Carbon::parse($this->data_naixement)->age;
+        return $this->data_naixement ? Carbon::parse($this->data_naixement)->age : null;
     }
 }

@@ -9,27 +9,16 @@ class Equip extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'nom',
-        'ciutat',
-        'lliga',
-        // altres camps que vulguis afegir
-    ];
+    protected $fillable = ['nom', 'ciutat', 'lliga', 'escut'];
 
-    // Relació 1:N → jugadores
-    public function jugadores()
-    {
-        return $this->hasMany(Jugadora::class);
-    }
-
-    // Relació 1:N → partits com a local
-    public function partitsLocals()
+    // Relació amb partits on l’equip és local
+    public function partitsLocal()
     {
         return $this->hasMany(Partit::class, 'local_id');
     }
 
-    // Relació 1:N → partits com a visitant
-    public function partitsVisitants()
+    // Relació amb partits on l’equip és visitant
+    public function partitsVisitant()
     {
         return $this->hasMany(Partit::class, 'visitant_id');
     }

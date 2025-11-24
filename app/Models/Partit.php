@@ -15,25 +15,21 @@ class Partit extends Model
         'estadi_id',
         'data',
         'jornada',
-        'gols_local',
-        'gols_visitant',
+        'resultat'
     ];
 
-    // Relació N:1 → equip local
     public function local()
     {
         return $this->belongsTo(Equip::class, 'local_id');
     }
 
-    // Relació N:1 → equip visitant
     public function visitant()
     {
         return $this->belongsTo(Equip::class, 'visitant_id');
     }
 
-    // Relació N:1 → estadi
     public function estadi()
     {
-        return $this->belongsTo(Estadi::class);
+        return $this->belongsTo(Estadi::class, 'estadi_id');
     }
 }

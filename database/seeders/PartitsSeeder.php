@@ -13,26 +13,37 @@ class PartitsSeeder extends Seeder
     public function run()
     {
         $equips = Equip::all();
-        if ($equips->count() < 2) {
+        if ($equips->count() < 10) {
             $equips = Equip::factory()->count(18)->create();
         }
 
         $estadis = Estadi::all();
-        if ($estadis->isEmpty()) {
+        if ($estadis->count() < 5) {
             $estadis = Estadi::factory()->count(5)->create();
         }
 
-        // Exemple molt simple: crear 20 partits aleatoris
-        for ($i = 0; $i < 20; $i++) {
+        $dates = collect();
+        $today = Carbon::today();
+
+        // Generar 60 partits amb combinacions aleatòries i dates repartides
+        for ($i = 0; $i < 60; $i++) {
             $local = $equips->random();
             $visitant = $equips->where('id', '!=', $local->id)->random();
+
+            // Evitar que es repeteixi local vs visitant el mateix dia
+            $date = $today->copy()->addDays(rand(-30, 90));
+            while ($dates->contains("{$local->id}-{$visitant->id}-{$date->toDateString()}")) {
+                $date->addDays(rand(0, 7));
+            }
+            $dates->push("{$local->id}-{$visitant->id}-{$date->toDateString()}");
+
             Partit::create([
                 'local_id' => $local->id,
                 'visitant_id' => $visitant->id,
                 'estadi_id' => $estadis->random()->id,
-                'data' => Carbon::now()->addDays(rand(-30, 90))->format('Y-m-d'),
+                'data' => $date->format('Y-m-d'),
                 'jornada' => rand(1, 38),
-                'resultat' => (rand(0, 1) ? rand(0, 4) . '-' . rand(0, 4) : null),
+                'resultat' => rand(0, 1) ? rand(0, 5) . '-' . rand(0, 5) : null,
             ]);
         }
     }

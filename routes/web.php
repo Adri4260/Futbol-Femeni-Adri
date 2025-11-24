@@ -12,9 +12,10 @@ Route::get('/', function () {
 
 // ---------- EQUIPS (mini-guia base) ----------
 Route::get('/equips', [EquipController::class, 'index'])->name('equips.index');
-Route::get('/equips/crear', [EquipController::class, 'create'])->name('equips.create');
+Route::get('/equips/create', [EquipController::class, 'create'])->name('equips.create');
 Route::post('/equips', [EquipController::class, 'store'])->name('equips.store');
-Route::get('/equips/{index}', [EquipController::class, 'show'])->name('equips.show');
+Route::get('/equips/{id}', [EquipController::class, 'show'])->name('equips.show');
+
 
 // ---------- ESTADIS ----------
 Route::get('/estadis', [EstadiController::class, 'index'])->name('estadis.index');

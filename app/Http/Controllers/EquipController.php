@@ -9,19 +9,21 @@ class EquipController extends Controller
 {
     public function index()
     {
-        $equips = Equip::all(); // o paginate si vols
+        $equips = Equip::all();
         return view('equips.index', compact('equips'));
     }
 
     public function show($id)
     {
-        $equip = Equip::find($id); // trobar per ID
+        $equip = Equip::findOrFail($id);
 
-        if (!$equip) {
-            return redirect()->route('equips.index')->with('error', 'Equip no trobat.');
-        }
+        $partitsJugats = $equip->partitsLocal->whereNotNull('resultat')
+            ->merge($equip->partitsVisitant->whereNotNull('resultat'));
 
-        return view('equips.show', compact('equip'));
+        $partitsPendents = $equip->partitsLocal->whereNull('resultat')
+            ->merge($equip->partitsVisitant->whereNull('resultat'));
+
+        return view('equips.show', compact('equip', 'partitsJugats', 'partitsPendents'));
     }
 
     public function create()

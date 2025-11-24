@@ -2,68 +2,39 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Jugadora;
+use App\Models\Equip;
 use Illuminate\Http\Request;
 
 class JugadoraController extends Controller
 {
-
     public function index()
     {
-        $jugadores = $this->getJugadoresFromSession();
+        // Agafa totes les jugadores amb l'equip relacionat
+        $jugadores = Jugadora::with('equip')->get();
 
         return view('jugadores.index', compact('jugadores'));
     }
 
     public function create()
     {
-        $posicions = ['Portera', 'Defensa', 'Migcampista', 'Davantera'];
+        $posicions = ['Davanter', 'Defensa', 'Porter', 'Migcampista'];
+        $equips = Equip::all(); // Si vols un select amb equips existents
 
-        return view('jugadores.create', compact('posicions'));
+        return view('jugadores.create', compact('posicions', 'equips'));
     }
-
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'nom'   => 'required|min:3',
-            'equip' => 'required|min:2',
-            'posicio' => 'required|in:Portera,Defensa,Migcampista,Davantera',
+        $data = $request->validate([
+            'nom' => 'required|string|max:255',
+            'cognoms' => 'required|string|max:255', // afegit
+            'equip_id' => 'required|exists:equips,id',
+            'posicio' => 'required|string',
         ]);
 
-        $jugadores = $this->getJugadoresFromSession();
-        $jugadores[] = $validated;
+        Jugadora::create($data);
 
-        session(['jugadores' => $jugadores]);
-
-        return redirect()
-            ->route('jugadores.index')
-            ->with('success', 'Jugadora creada correctament.');
-    }
-
-    protected function getJugadoresFromSession(): array
-    {
-        if (!session()->has('jugadores')) {
-            $seed = [
-                [
-                    'nom'    => 'Alexia Putellas',
-                    'equip'  => 'Barça Femení',
-                    'posicio'=> 'Migcampista',
-                ],
-                [
-                    'nom'    => 'Esther González',
-                    'equip'  => 'Atlètic de Madrid',
-                    'posicio'=> 'Davantera',
-                ],
-                [
-                    'nom'    => 'Misa Rodríguez',
-                    'equip'  => 'Real Madrid Femení',
-                    'posicio'=> 'Portera',
-                ],
-            ];
-
-            session(['jugadores' => $seed]);
-        }
-
-        return session('jugadores', []);
+        return redirect()->route('jugadores.index')->with('success', 'Jugadora creada!');
     }
 }
