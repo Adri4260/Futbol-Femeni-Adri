@@ -1,5 +1,96 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Cos principal */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #cd1515;
+    margin: 0;
+    padding: 0;
+}
 
-@import './guias.css';
+/* Header */
+.topbar {
+    background-color: #3490dc;
+    color: white;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+/* Container general */
+.container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* Taules */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+table th, table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+table th {
+    background-color: #f1f1f1;
+    color: #333;
+}
+
+table tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+/* Botons */
+.btn {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #3490dc;
+    color: #fff;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background 0.3s;
+}
+
+.btn:hover {
+    background-color: #2779bd;
+}
+
+/* Formularis */
+input[type="text"], input[type="number"], select {
+    width: 100%;
+    padding: 8px 10px;
+    margin: 6px 0 12px 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+label {
+    font-weight: 600;
+    display: block;
+    margin-top: 1rem;
+}
+
+/* Alerts */
+.alert {
+    padding: 12px 15px;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+}

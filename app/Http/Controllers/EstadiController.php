@@ -22,8 +22,7 @@ class EstadiController extends Controller
 
     public function store(EstadiRequest $request)
     {
-        $data = $request->validated();
-        Estadi::create($data);
+        Estadi::create($request->validated());
         return redirect()->route('estadis.index')->with('success', 'Estadi creat.');
     }
 

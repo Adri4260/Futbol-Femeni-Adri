@@ -13,7 +13,7 @@ class Equip extends Model
         'nom',
         'ciutat',
         'lliga',
-        'escut',
+        // altres camps que vulguis afegir
     ];
 
     // Relació 1:N → jugadores
@@ -23,13 +23,13 @@ class Equip extends Model
     }
 
     // Relació 1:N → partits com a local
-    public function partitsLocal()
+    public function partitsLocals()
     {
         return $this->hasMany(Partit::class, 'local_id');
     }
 
     // Relació 1:N → partits com a visitant
-    public function partitsVisitant()
+    public function partitsVisitants()
     {
         return $this->hasMany(Partit::class, 'visitant_id');
     }
