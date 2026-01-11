@@ -1,124 +1,97 @@
-# 📄 README.md: Projecte Futbol Femení
+# 📄 README.md: Projecte Futbol Femení (Part 3)
 ## Autor: Adrián Becerra Pérez
 ---
 
 # Projecte Futbol Femení
 
 ## Descripció
-Aquest projecte és una aplicació web construïda amb **Laravel 12** i **PHP 8.4** per gestionar equips de futbol femení, jugadores, estadis i partits.
-L’objectiu principal de la **Part 2** és la gestió de partits i estadis, permetent afegir, visualitzar i validar partits amb equips i estadis relacionats.
+Aquest projecte és una aplicació web completa construïda amb **Laravel 12** i **PHP 8.4** per a la gestió d'un club o lliga de futbol femení.
+
+Aquesta entrega final (**Part 3**) integra funcionalitats avançades sobre la base anterior, incloent-hi **autenticació amb rols** (Admin/Manager), **API REST**, **generació de PDF** (actes), **enviaments de correu**, interfícies dinàmiques amb **Livewire** i un entorn optimitzat per a **producció**.
 
 ---
 
-## Estructura de la Base de Dades
+## 🔑 Credencials d'Accés (Informació per al Tutor)
 
-### Taules principals
-* **equips**
-    * id, nom, ciutat, lliga, escut, timestamps
-* **jugadoras**
-    * id, nom, cognoms, equip_id, posicio, timestamps
-* **estadis**
-    * id, nom, ciutat, capacitat, equip_principal_id, timestamps
-* **partits**
-    * id, local_id, visitant_id, estadi_id, data, jornada, resultat, timestamps
+Per accedir a l'aplicació i provar els diferents nivells de permisos, s'han generat els següents usuaris mitjançant els *Seeders*.
 
-### Relacions
-* Una **jugadora** pertany a un **equip** (`belongsTo`).
-* Un **partit** té un **equip local**, un **equip visitant** i un **estadi** (`belongsTo`).
-* Un **estadi** pot tenir molts **partits** (`hasMany`) i pertany a un **equip principal** (`belongsTo`).
+| Rol | Email (Usuari) | Contrasenya | Permisos Principals |
+| :--- | :--- | :--- | :--- |
+| **Administrador** | `admin@futbolfemeni.com` | `password` | Accés total. Pot crear, editar i eliminar Equips, Jugadores, Estadis i Partits. |
+| **Manager** | `manager@futbolfemeni.com` | `password` | Gestió d'Equips i Jugadores. Rep correus de la jornada. No pot gestionar Estadis/Partits. |
+| **Usuari Normal** | (Registre nou) | (A triar) | Només lectura. Pot veure les dades però no modificar res. |
+
+> **Nota:** Si la base de dades es regenera (`migrate:fresh --seed`), aquests usuaris es tornaran a crear amb aquesta contrasenya per defecte.
 
 ---
 
-## Instal·lació i Configuració
+## 🚀 Noves Funcionalitats (Part 3)
 
-1.  Clonar el repositori:
-    ```bash
-    git clone <URL_DEL_REPOSITORI>
-    cd projecte-futbol-femeni
-    ```
-2.  Instal·lar dependències:
-    ```bash
-    composer install
-    npm install
-    npm run dev
-    ```
-3.  Configurar `.env` amb la base de dades MySQL:
-    ```bash
-    DB_CONNECTION=mysql
-    DB_HOST=127.0.0.1
-    DB_PORT=3306
-    DB_DATABASE=laravel
-    DB_USERNAME=root
-    DB_PASSWORD=
-    ```
-4.  Migrar base de dades i crear dades de prova:
-    ```bash
-    php artisan migrate
-    php artisan db:seed
-    ```
-5.  Opcionalment, utilitzar Tinker per verificar dades:
-    ```bash
-    ./vendor/bin/sail artisan tinker
-    \App\Models\Jugadora::all();
-    \App\Models\Equip::all();
-    \App\Models\Estadi::all();
-    \App\Models\Partit::with(['local','visitant','estadi'])->get();
-    ```
+### 1. Seguretat i Rols
+* **Autenticació:** Sistema complet de Login/Registre utilitzant **Laravel Breeze**.
+* **Gestió de Rols:** Implementació de Middleware (`role:admin,manager`) per protegir rutes crítiques.
+* **Policies:** Ocultació de botons (Editar/Eliminar) a la interfície segons el rol de l'usuari connectat.
+
+### 2. Funcionalitats Avançades
+* **Generació de PDF:** Descàrrega de l'acta oficial del partit des del llistat de partits (`/partits`), incloent-hi resultat i alineacions.
+* **Enviaments de Correu:** Sistema automàtic per notificar als mànagers sobre els partits de la pròxima jornada.
+    * Comanda manual: `php artisan jornada:enviar`
+* **Interactivitat (Livewire):** Nova secció "Històric" amb filtres en temps real per equip i data sense recarregar la pàgina.
+* **Internacionalització:** Suport per a **Valencià/Català (CA)** i **Castellà (ES)**, canviant des de la barra de navegació.
+
+### 3. API REST
+S'ha creat una API pública per permetre la consulta de dades des d'aplicacions externes.
+* **Llistat d'equips:** `GET /api/equips`
+* **Detall d'un equip:** `GET /api/equips/{id}`
+* Respostes en format JSON netejades mitjançant *API Resources*.
 
 ---
 
-## Mòduls de Gestió
+## 📦 Desplegament i Execució (Molt Important)
 
-### Gestió de Jugadoras
-* **Llistat de jugadores:** Mostra el nom, equip i posició de cada jugadora.
-* **Afegir jugadora nova:**
-    * Formulari amb nom, equip (select d’equips existents) i posició.
-    * Validació per camp obligatori i select d’equip existent.
-    * Exemple de component Blade: `<x-jugadora :jugadora="$jugadora" />`
+Per a aquesta entrega, s'ha configurat el projecte per a simular un entorn de **Producció** real. Això millora el rendiment i la seguretat, però requereix passos específics perquè els estils (CSS) es carreguen correctament.
 
-### Gestió de Partits
-* **Llistat de partits:** Mostra local, visitant, estadi, data i resultat.
-* **Afegir partit nou:**
-    * Formulari amb selects per equip local, equip visitant i estadi.
-    * Data en format `YYYY-MM-DD`.
-    * Resultat opcional en format `X-Y`.
-    * **Validació:** `local_id` i `visitant_id` diferents, `estadi_id` existeix.
-    * **Controlador:** `PartitController` amb mètodes `index`, `create`, `store`.
-* **Relacions a Eloquent:**
-    * `Partit` -> `local` (`belongsTo Equip`)
-    * `Partit` -> `visitant` (`belongsTo Equip`)
-    * `Partit` -> `estadi` (`belongsTo Estadi`)
+### Passos per a executar el projecte:
 
-### Gestió d’Estadis
-* **Llistat d’estadis:** Mostra nom, ciutat, capacitat i equip principal.
-* **Afegir estadi nou:**
-    * Formulari amb nom, ciutat, capacitat i equip principal (select).
-* **Relacions a Eloquent:**
-    * `Estadi` -> `equipPrincipal` (`belongsTo Equip`)
-    * `Estadi` -> `partits` (`hasMany Partit`)
-
----
-
-## Notes i Consideracions
-
-* Es recomana utilitzar **selects** per equips i estadis al formulari per evitar errors de relacionament.
-* S’ha utilitzat **Faker** per generar dades de prova amb **Factories** i **Seeders**.
-* Alguns camps com `cognoms` o `equip_principal_id` tenen valors **obligatoris en BD**, assegurar-se que es proporcionen al crear nous registres.
-* Tots els errors de validació es mostren al formulari per millorar l’experiència de l’usuari.
-
----
-
-## Com executar l’aplicació
-
-1.  Iniciar Sail (Docker) si s’utilitza:
+1.  **Iniciar els contenidors (Docker/Sail):**
     ```bash
     ./vendor/bin/sail up -d
     ```
-2.  Accedir a l’aplicació via navegador a:
+
+2.  **Instal·lar dependències (si és la primera vegada):**
+    ```bash
+    ./vendor/bin/sail composer install
+    ./vendor/bin/sail npm install
     ```
-    http://localhost
+
+3.  **Configurar la Base de Dades i Usuaris:**
+    ```bash
+    ./vendor/bin/sail artisan migrate:fresh --seed
     ```
-3.  Navegar a:
-    * `/jugadores` per gestionar jugadores.
-    * `/partits` per gestionar partits.
-    * `/estadis` per gestionar estadis.
+
+4.  **Compilar els Estils per a Producció:**
+    **⚠️ Pas Crític:** Si no s'executa, la web es veurà sense format.
+    ```bash
+    ./vendor/bin/sail npm run build
+    ```
+
+5.  **Optimitzar la Memòria Cau:**
+    ```bash
+    ./vendor/bin/sail artisan config:cache
+    ./vendor/bin/sail artisan view:cache
+    ```
+
+6.  **Accés:**
+    Obrir el navegador a `http://localhost`.
+
+---
+
+## 🧪 Tests Automatitzats
+
+S'han inclòs proves unitàries i de funcionalitat per garantir la robustesa del codi.
+* Ús de base de dades en memòria (SQLite) per a una execució ràpida.
+* Tests de serveis (`EquipService`) utilitzant *Mockery* per aïllar la lògica de la base de dades.
+
+Per executar els tests:
+```bash
+./vendor/bin/sail artisan test
