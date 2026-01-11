@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
             EstadisSeeder::class,
             JugadoresSeeder::class,
             PartitsSeeder::class,
+            UserSeeder::class,
         ]);
     }
 }

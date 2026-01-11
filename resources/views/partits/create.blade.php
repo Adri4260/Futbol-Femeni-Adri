@@ -1,4 +1,5 @@
-@extends('layouts.app')
+@extends('layouts.equip')
+
 
 @section('content')
 <h2>Nou partit</h2>

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Equip extends Model
 {
@@ -21,5 +22,13 @@ class Equip extends Model
     public function partitsVisitant()
     {
         return $this->hasMany(Partit::class, 'visitant_id');
+    }
+
+    // Al principio: use Illuminate\Database\Eloquent\Relations\HasOne;
+
+    public function manager(): HasOne
+    {
+        // Un equipo tiene UN usuario (manager) asociado
+        return $this->hasOne(User::class, 'team_id');
     }
 }

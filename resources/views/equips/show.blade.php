@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.equip')
 
 @section('content')
 <h2>Detall de l'equip</h2>

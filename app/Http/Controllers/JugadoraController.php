@@ -10,31 +10,53 @@ class JugadoraController extends Controller
 {
     public function index()
     {
-        // Agafa totes les jugadores amb l'equip relacionat
         $jugadores = Jugadora::with('equip')->get();
-
         return view('jugadores.index', compact('jugadores'));
     }
 
     public function create()
     {
-        $posicions = ['Davanter', 'Defensa', 'Porter', 'Migcampista'];
-        $equips = Equip::all(); // Si vols un select amb equips existents
-
-        return view('jugadores.create', compact('posicions', 'equips'));
+        $equips = Equip::all();
+        return view('jugadores.create', compact('equips'));
     }
 
     public function store(Request $request)
     {
-        $data = $request->validate([
+        $validated = $request->validate([
             'nom' => 'required|string|max:255',
-            'cognoms' => 'required|string|max:255', // afegit
-            'equip_id' => 'required|exists:equips,id',
-            'posicio' => 'required|string',
+            'posicio' => 'required|string|max:255',
+            'equip_id' => 'nullable|exists:equips,id',
         ]);
 
-        Jugadora::create($data);
+        Jugadora::create($validated);
 
-        return redirect()->route('jugadores.index')->with('success', 'Jugadora creada!');
+        return redirect()->route('jugadores.index')->with('success', 'Jugadora creada correctament.');
+    }
+
+    // --- MÉTODOS QUE TE FALTABAN ---
+
+    public function edit(Jugadora $jugadora)
+    {
+        $equips = Equip::all();
+        return view('jugadores.edit', compact('jugadora', 'equips'));
+    }
+
+    public function update(Request $request, Jugadora $jugadora)
+    {
+        $validated = $request->validate([
+            'nom' => 'required|string|max:255',
+            'posicio' => 'required|string|max:255',
+            'equip_id' => 'nullable|exists:equips,id',
+        ]);
+
+        $jugadora->update($validated);
+
+        return redirect()->route('jugadores.index')->with('success', 'Jugadora actualitzada correctament.');
+    }
+
+    public function destroy(Jugadora $jugadora)
+    {
+        $jugadora->delete();
+        return redirect()->route('jugadores.index')->with('success', 'Jugadora eliminada correctament.');
     }
 }

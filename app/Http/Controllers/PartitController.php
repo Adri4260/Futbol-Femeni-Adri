@@ -6,6 +6,7 @@ use App\Models\Partit;
 use App\Models\Equip;
 use App\Models\Estadi;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PartitController extends Controller
 {
@@ -17,8 +18,8 @@ class PartitController extends Controller
 
     public function create()
     {
-        $equips = Equip::all();      // Agafem tots els equips
-        $estadios = Estadi::all();   // Agafem tots els estadis
+        $equips = Equip::all();
+        $estadios = Estadi::all();
 
         return view('partits.create', compact('equips', 'estadios'));
     }
@@ -40,5 +41,16 @@ class PartitController extends Controller
         return redirect()
             ->route('partits.index')
             ->with('success', 'Partit creat correctament.');
+    }
+    public function historic()
+    {
+        return view('partits.historic');
+    }
+
+    public function acta(Partit $partit)
+    {
+        $pdf = Pdf::loadView('partits.acta', compact('partit'));
+
+        return $pdf->download("acta-partit-{$partit->id}.pdf");
     }
 }
