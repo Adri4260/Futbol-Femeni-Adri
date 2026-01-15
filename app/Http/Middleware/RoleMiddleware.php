@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
 
 class RoleMiddleware
 {
-    // El ...$roles permite pasar varios roles separados por coma: 'admin,manager'
     public function handle(Request $request, Closure $next, ...$roles): Response
     {
         if (!Auth::check()) {
@@ -18,8 +17,6 @@ class RoleMiddleware
 
         $userRole = Auth::user()->role;
 
-        // Si el rol del usuario está en la lista de permitidos, pasa.
-        // Si es admin, le dejamos pasar siempre (opcional, pero útil).
         if (in_array($userRole, $roles) || $userRole === 'admin') {
             return $next($request);
         }

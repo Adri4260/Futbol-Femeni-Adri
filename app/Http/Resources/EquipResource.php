@@ -11,10 +11,9 @@ class EquipResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'nom_equip' => $this->nom, // Podemos cambiar el nombre de la clave si queremos
+            'nom_equip' => $this->nom,
             'ciutat' => $this->ciutat,
             'lliga' => $this->lliga,
-            // Si hay escudo, devolvemos la URL completa, si no, null
             'escut_url' => $this->escut ? asset('storage/' . $this->escut) : null,
         ];
     }

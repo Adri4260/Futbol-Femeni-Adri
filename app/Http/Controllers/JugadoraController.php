@@ -33,8 +33,6 @@ class JugadoraController extends Controller
         return redirect()->route('jugadores.index')->with('success', 'Jugadora creada correctament.');
     }
 
-    // --- MÉTODOS QUE TE FALTABAN ---
-
     public function edit(Jugadora $jugadora)
     {
         $equips = Equip::all();

@@ -25,12 +25,10 @@ class PartitsSeeder extends Seeder
         $dates = collect();
         $today = Carbon::today();
 
-        // Generar 60 partits amb combinacions aleatòries i dates repartides
         for ($i = 0; $i < 60; $i++) {
             $local = $equips->random();
             $visitant = $equips->where('id', '!=', $local->id)->random();
 
-            // Evitar que es repeteixi local vs visitant el mateix dia
             $date = $today->copy()->addDays(rand(-30, 90));
             while ($dates->contains("{$local->id}-{$visitant->id}-{$date->toDateString()}")) {
                 $date->addDays(rand(0, 7));

@@ -19,7 +19,6 @@ class HistorialPartits extends Component
 
     public function filtrar()
     {
-        // CAMBIO AQUÍ: Usamos 'local' y 'visitant' como en tu modelo
         $this->partits = Partit::with(['local', 'visitant'])
             ->when($this->equip, function ($query) {
                 $query->whereHas('local', fn($q) => $q->where('nom', 'like', "%{$this->equip}%"))

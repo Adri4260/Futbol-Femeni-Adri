@@ -12,7 +12,6 @@ class SetLocale
 {
     public function handle(Request $request, Closure $next): Response
     {
-        // Si hay un idioma guardado en la sesión, lo usamos
         if (Session::has('locale')) {
             App::setLocale(Session::get('locale'));
         }
