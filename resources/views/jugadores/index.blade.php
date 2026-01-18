@@ -35,13 +35,19 @@
                 </td>
                 <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-center">
                     <div class="flex justify-center space-x-3">
+                        {{-- NOMÉS SI TENS PERMÍS PER EDITAR (Admin o Manager del mateix equip) --}}
+                        @can('update', $jugadora)
                         <a href="{{ route('jugadores.edit', $jugadora) }}" class="text-yellow-600 hover:text-yellow-900 font-bold">Editar</a>
+                        @endcan
 
-                        <form action="{{ route('jugadores.destroy', $jugadora) }}" method="POST" class="inline-block" onsubmit="return confirm('Segur?');">
+                        {{-- NOMÉS SI TENS PERMÍS PER ESBORRAR --}}
+                        @can('delete', $jugadora)
+                        <form action="{{ route('jugadores.destroy', $jugadora) }}" method="POST" class="inline-block" onsubmit="return confirm('Segur que vols eliminar aquesta jugadora?');">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="text-red-600 hover:text-red-900 font-bold">Eliminar</button>
                         </form>
+                        @endcan
                     </div>
                 </td>
             </tr>

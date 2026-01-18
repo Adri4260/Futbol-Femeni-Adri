@@ -15,7 +15,6 @@ class EstadisSeeder extends Seeder
             $equips = Equip::factory()->count(5)->create();
         }
 
-        // Crear alguns estadis i assignar equips random
         Estadi::factory()->count(8)->create()->each(function ($estadi) use ($equips) {
             $estadi->equip_principal_id = $equips->random()->id;
             $estadi->save();

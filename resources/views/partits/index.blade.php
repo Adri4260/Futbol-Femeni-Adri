@@ -42,13 +42,23 @@
                     {{ $partit->resultat ?? '-' }}
                 </td>
                 <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-center">
-                    <a href="{{ route('partits.acta', $partit) }}" class="text-red-600 hover:text-red-900 font-bold mr-2" title="Descarregar PDF">
-                        📄 PDF
-                    </a>
+                    <div class="flex justify-center items-center space-x-2">
+                        <a href="{{ route('partits.acta', $partit) }}" class="text-red-600 hover:text-red-900 font-bold mr-2" title="Descarregar PDF">📄 PDF</a>
 
-                    @can('update', $partit)
-                    <a href="{{ route('partits.edit', $partit) }}" class="text-yellow-600 hover:text-yellow-900 font-bold">Editar</a>
-                    @endcan
+                        {{-- Aquest botó el veurà l'Admin i l'Àrbitre del partit --}}
+                        @can('update', $partit)
+                        <a href="{{ route('partits.edit', $partit) }}" class="text-yellow-600 hover:text-yellow-900 font-bold">Editar</a>
+                        @endcan
+
+                        {{-- Aquest només l'Admin --}}
+                        @can('delete', $partit)
+                        <form action="{{ route('partits.destroy', $partit) }}" method="POST" class="inline-block" onsubmit="return confirm('Segur que vols eliminar aquest partit?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="text-red-600 hover:text-red-900 font-bold">Eliminar</button>
+                        </form>
+                        @endcan
+                    </div>
                 </td>
             </tr>
             @empty

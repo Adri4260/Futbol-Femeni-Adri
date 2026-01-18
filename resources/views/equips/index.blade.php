@@ -4,6 +4,7 @@
 <div class="flex justify-between items-center mb-6">
     <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200">Equips</h2>
 
+    {{-- Només es mostra si tens permís per CREAR (Admin o Manager sense equip) --}}
     @can('create', App\Models\Equip::class)
     <a href="{{ route('equips.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow">
         + Nou equip
@@ -45,15 +46,11 @@
                     <span class="text-gray-400">Sin escut</span>
                     @endif
                 </td>
-                <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm">
-                    <p class="text-gray-900 dark:text-gray-200 whitespace-no-wrap font-semibold">
-                        {{ $equip->nom }}
-                    </p>
+                <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm font-semibold text-gray-900 dark:text-gray-200">
+                    {{ $equip->nom }}
                 </td>
                 <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm">
-                    <p class="text-gray-900 dark:text-gray-200 whitespace-no-wrap">
-                        {{ $equip->ciutat }}
-                    </p>
+                    {{ $equip->ciutat }}
                 </td>
                 <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm">
                     <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
@@ -65,14 +62,25 @@
                     {{ $equip->estadi ? $equip->estadi->nom : '-' }}
                 </td>
                 <td class="px-5 py-5 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-center">
-                    <div class="flex justify-center space-x-3">
-                        <a href="{{ route('equips.edit', $equip) }}" class="text-yellow-600 hover:text-yellow-900 font-bold">Editar</a>
+                    <div class="flex justify-center items-center space-x-3">
 
+                        {{-- BOTÓ VEURE (Nou) --}}
+                        <a href="{{ route('equips.show', $equip) }}" class="text-blue-600 hover:text-blue-900 font-bold" title="Veure detalls">
+                            Veure
+                        </a>
+
+                        {{-- NOMÉS ES VEUEN SI TENS PERMÍS (Admin o Manager del mateix equip) --}}
+                        @can('update', $equip)
+                        <a href="{{ route('equips.edit', $equip) }}" class="text-yellow-600 hover:text-yellow-900 font-bold">Editar</a>
+                        @endcan
+
+                        @can('delete', $equip)
                         <form action="{{ route('equips.destroy', $equip) }}" method="POST" class="inline-block" onsubmit="return confirm('Segur que vols eliminar aquest equip?');">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="text-red-600 hover:text-red-900 font-bold">Eliminar</button>
                         </form>
+                        @endcan
                     </div>
                 </td>
             </tr>

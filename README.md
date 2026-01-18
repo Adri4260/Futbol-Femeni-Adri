@@ -1,97 +1,109 @@
-# 📄 README.md: Projecte Futbol Femení (Part 3)
-## Autor: Adrián Becerra Pérez
----
+# 📄 Projecte Futbol Femení (Part 3)
 
-# Projecte Futbol Femení
-
-## Descripció
-Aquest projecte és una aplicació web completa construïda amb **Laravel 12** i **PHP 8.4** per a la gestió d'un club o lliga de futbol femení.
-
-Aquesta entrega final (**Part 3**) integra funcionalitats avançades sobre la base anterior, incloent-hi **autenticació amb rols** (Admin/Manager), **API REST**, **generació de PDF** (actes), **enviaments de correu**, interfícies dinàmiques amb **Livewire** i un entorn optimitzat per a **producció**.
+## 👤 Autor
+**Adrián Becerra Pérez** - Desenvolupament d'Aplicacions Web (DAW)
 
 ---
 
-## 🔑 Credencials d'Accés (Informació per al Tutor)
+## 📝 Descripció del Projecte
+Aquest projecte és una aplicació web completa construïda amb **Laravel 12** i **PHP 8.4** per a la gestió integral d'un club o lliga de futbol femení.
 
-Per accedir a l'aplicació i provar els diferents nivells de permisos, s'han generat els següents usuaris mitjançant els *Seeders*.
+Aquesta entrega final (**Part 3**) transforma el projecte en un sistema professional llest per a producció. S'han integrat funcionalitats avançades com:
+* **Seguretat basada en Rols** (Admin, Mànager, Àrbitre).
+* **Generació d'Actes en PDF**.
+* **Notificacions per Correu Electrònic**.
+* **Lògica de Negoci Complexa** (Classificació automàtica, ratxes de victòries, mitjana d'edat).
+* **API REST** pública.
+* **Internacionalització** (Valencià / Castellà / Anglès).
 
-| Rol | Email (Usuari) | Contrasenya | Permisos Principals |
+---
+
+## 🔑 Credencials d'Accés (Usuaris de Prova)
+
+Per avaluar correctament les funcionalitats i les restriccions de seguretat (Policies/Gates), s'han creat els següents usuaris mitjançant els *Seeders*:
+
+| Rol | Email | Contrasenya | Permisos i Funcionalitats Clau |
 | :--- | :--- | :--- | :--- |
-| **Administrador** | `admin@futbolfemeni.com` | `password` | Accés total. Pot crear, editar i eliminar Equips, Jugadores, Estadis i Partits. |
-| **Manager** | `manager@futbolfemeni.com` | `password` | Gestió d'Equips i Jugadores. Rep correus de la jornada. No pot gestionar Estadis/Partits. |
-| **Usuari Normal** | (Registre nou) | (A triar) | Només lectura. Pot veure les dades però no modificar res. |
+| **Administrador** | `admin@futbolfemeni.com` | `password` | **Control Total**. Pot crear, editar i esborrar qualsevol entitat (Equips, Jugadores, Estadis, Partits). |
+| **Mànager** | `manager_valencia-cf@futbolfemeni.com` | `password` | **Gestió de Club**. Només pot editar el *seu* equip i les *seues* jugadores. Rep correus de la jornada. |
+| **Àrbitre** | `arbitre1@futbolfemeni.com` | `password` | **Gestió de Resultats**. Només pot editar el resultat ("Gols-Gols") dels partits on està assignat. |
 
-> **Nota:** Si la base de dades es regenera (`migrate:fresh --seed`), aquests usuaris es tornaran a crear amb aquesta contrasenya per defecte.
+> **Nota:** Si regeneres la base de dades, utilitza aquestes credencials. Per provar el rol de Mànager, assegura't d'utilitzar un usuari assignat a un equip específic (com l'exemple del València CF) i no el genèric.
+---
+
+## 🗺️ Guia de Navegació (URLs Importants)
+
+Ací tens les rutes clau per verificar les funcionalitats de la pràctica:
+
+### 🏠 Panell Principal (Dashboard)
+* **`http://localhost/dashboard`** → **Classificació en Temps Real**.
+    * *Què observar:* La taula s'ordena automàticament per punts (3 victòria, 1 empat). Mostra l'edat mitjana de la plantilla i la ratxa dels últims 5 partits amb indicadors visuals (🟢 Guanyat, 🔴 Perdut, 🔵 Empat).
+
+### ⚽ Gestió Esportiva
+* **`http://localhost/partits`** → **Calendari i Actes**.
+    * *Què observar:* Llistat ordenat cronològicament. Botó **PDF** per descarregar l'acta. Botó **Editar** (només visible si tens permís sobre eixe partit).
+* **`http://localhost/equips`** → **Gestió de Clubs**.
+    * *Què observar:* Llistat amb escuts. Els botons d'acció "Editar" o "Eliminar" estan protegits i només apareixen si l'usuari té drets sobre l'equip.
+
+### 📬 Eines Externes
+* **`http://localhost:8025`** → **Mailpit (Safata de Correu)**.
+    * *Què observar:* Ací arriben els correus enviats pel sistema (ex: Resum de la Jornada).
+
+### 🔌 API REST (JSON)
+* **`GET /api/equips`** → Llistat complet d'equips en format JSON.
+* **`GET /api/equips/{id}`** → Dades detallades d'un equip específic.
 
 ---
 
-## 🚀 Noves Funcionalitats (Part 3)
+## 📦 Instal·lació i Desplegament
 
-### 1. Seguretat i Rols
-* **Autenticació:** Sistema complet de Login/Registre utilitzant **Laravel Breeze**.
-* **Gestió de Rols:** Implementació de Middleware (`role:admin,manager`) per protegir rutes crítiques.
-* **Policies:** Ocultació de botons (Editar/Eliminar) a la interfície segons el rol de l'usuari connectat.
-
-### 2. Funcionalitats Avançades
-* **Generació de PDF:** Descàrrega de l'acta oficial del partit des del llistat de partits (`/partits`), incloent-hi resultat i alineacions.
-* **Enviaments de Correu:** Sistema automàtic per notificar als mànagers sobre els partits de la pròxima jornada.
-    * Comanda manual: `php artisan jornada:enviar`
-* **Interactivitat (Livewire):** Nova secció "Històric" amb filtres en temps real per equip i data sense recarregar la pàgina.
-* **Internacionalització:** Suport per a **Valencià/Català (CA)** i **Castellà (ES)**, canviant des de la barra de navegació.
-
-### 3. API REST
-S'ha creat una API pública per permetre la consulta de dades des d'aplicacions externes.
-* **Llistat d'equips:** `GET /api/equips`
-* **Detall d'un equip:** `GET /api/equips/{id}`
-* Respostes en format JSON netejades mitjançant *API Resources*.
-
----
-
-## 📦 Desplegament i Execució (Molt Important)
-
-Per a aquesta entrega, s'ha configurat el projecte per a simular un entorn de **Producció** real. Això millora el rendiment i la seguretat, però requereix passos específics perquè els estils (CSS) es carreguen correctament.
-
-### Passos per a executar el projecte:
+Per simular un entorn de producció i assegurar que tots els estils (Tailwind CSS) es carreguen correctament, segueix aquests passos:
 
 1.  **Iniciar els contenidors (Docker/Sail):**
-    ```bash
-    ./vendor/bin/sail up -d
-    ```
+    `./vendor/bin/sail up -d`
 
-2.  **Instal·lar dependències (si és la primera vegada):**
-    ```bash
-    ./vendor/bin/sail composer install
-    ./vendor/bin/sail npm install
-    ```
+2.  **Configurar Base de Dades i Usuaris (Seeders):**
+    `./vendor/bin/sail artisan migrate:fresh --seed`
 
-3.  **Configurar la Base de Dades i Usuaris:**
-    ```bash
-    ./vendor/bin/sail artisan migrate:fresh --seed
-    ```
+3.  **Compilar Estils (CRÍTIC per als colors de la classificació):**
+    Si no executes aquest pas, els cercles verds/rojos/blaus de la ratxa no es veuran.
+    `./vendor/bin/sail npm run build`
+---
 
-4.  **Compilar els Estils per a Producció:**
-    **⚠️ Pas Crític:** Si no s'executa, la web es veurà sense format.
-    ```bash
-    ./vendor/bin/sail npm run build
-    ```
+## 💻 Comandes Personalitzades (Artisan)
 
-5.  **Optimitzar la Memòria Cau:**
-    ```bash
-    ./vendor/bin/sail artisan config:cache
-    ./vendor/bin/sail artisan view:cache
-    ```
+He creat comandes específiques per a tasques automatitzades i manteniment:
 
-6.  **Accés:**
-    Obrir el navegador a `http://localhost`.
+* **Enviar correus de la Jornada:**
+  Busca partits futurs i envia un resum als mànagers. (Està configurat en "Mode Demo" per enviar només 1 correu i no saturar Mailpit).
+  `./vendor/bin/sail artisan jornada:enviar`
+
+* **Executar Tests Automatitzats:**
+  Per verificar que la lògica de negoci (creació d'equips, validacions, etc.) funciona correctament.
+  `./vendor/bin/sail artisan test`
+
+### Solució de Problemes (Cache)
+Si la classificació no s'ordena correctament o els canvis a les rutes no s'apliquen, neteja la memòria cau amb:
+`./vendor/bin/sail artisan optimize:clear`
 
 ---
 
-## 🧪 Tests Automatitzats
+## ⚙️ Detalls Tècnics de la Implementació
 
-S'han inclòs proves unitàries i de funcionalitat per garantir la robustesa del codi.
-* Ús de base de dades en memòria (SQLite) per a una execució ràpida.
-* Tests de serveis (`EquipService`) utilitzant *Mockery* per aïllar la lògica de la base de dades.
+### 1. Seguretat i Autorització
+* **Middleware:** S'utilitza `role:admin,manager,arbitre` al fitxer `web.php` per protegir grups de rutes sencers.
+* **Policies & Gates:**
+    * **`PartitPolicy`:** Verifica si `$user->id === $partit->arbitre_id`. Això permet que un àrbitre només vega el botó "Editar" en **els seus** partits.
+    * **`EquipPolicy`:** Verifica si `$user->team_id === $equip->id`. Això permet que un mànager només puga editar les dades del seu propi club.
 
-Per executar els tests:
-```bash
-./vendor/bin/sail artisan test
+### 2. Lògica de Negoci (Models)
+Seguint les bones pràctiques MVC, la lògica complexa no està a les Vistes, sinó al Model (`Equip.php`):
+
+* **`getPuntsAttribute()`:** Recorre automàticament tots els partits jugats (com a local i visitant), suma 3 punts per victòria i 1 per empat, i retorna el total. Això permet ordenar la taula fàcilment al controlador.
+* **`getRachaAttribute()`:** Analitza els últims 5 partits per data. Desglossa el resultat ("2-1") i retorna un array `['G', 'P', 'E', 'G', 'P']` que la vista transforma en cercles de colors.
+* **`getEdatMitjanaAttribute()`:** Calcula l'edat exacta de cada jugadora basant-se en la seua data de naixement i retorna la mitjana de l'equip amb un decimal.
+
+### 3. Funcionalitats Extra
+* **PDF:** S'ha utilitzat la llibreria `dompdf` per generar l'acta del partit, dissenyada amb una vista Blade específica (`partits.acta`).
+* **Form Requests:** Totes les validacions d'entrada (Crear Jugadora, Actualitzar Partit) es fan en fitxers separats (`StorePartitRequest`, etc.) amb missatges d'error personalitzats en català.
+* **Internacionalització:** Selector d'idioma funcional a la barra de navegació que canvia l'idioma de tota la interfície (Valencià / Castellà / Anglès) utilitzant sessions.

@@ -32,4 +32,8 @@ class Partit extends Model
     {
         return $this->belongsTo(Estadi::class, 'estadi_id');
     }
+    public function arbitre()
+    {
+        return $this->belongsTo(User::class, 'arbitre_id');
+    }
 }
